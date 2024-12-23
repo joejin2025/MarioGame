@@ -1,16 +1,12 @@
-from enum import Enum
-
 import pygame
 
-from assets.component.animation_component import AnimationComponent
-from assets.component.jump_component import JumpComponent
-from assets.component.move_component import MoveComponent
+from common.common import Direction, MarioState
+from component.animation_component import AnimationComponent
+from component.jump_component import JumpComponent
+from component.move_component import MoveComponent
 
 
-class MarioState(Enum):
-    IDLE = 0
-    MOVE = 1
-    JUMP = 2
+
 
 
 mario_animations = {
@@ -29,6 +25,7 @@ class Mario(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, 0, 0)
 
         self.current_state = MarioState.IDLE
+        self.current_direction = Direction.RIGHT
         # 设置components
         self.move_component = MoveComponent(6, self)
         self.jump_component = JumpComponent(12, 0.8, self)
@@ -47,8 +44,14 @@ class Mario(pygame.sprite.Sprite):
 
     def handle_input(self, keys):
         self.move_component.move(keys)
+
         if keys[pygame.K_SPACE]:
             self.jump_component.jump()
+
+        if keys[pygame.K_LEFT]:
+            self.current_direction = Direction.LEFT
+        elif keys[pygame.K_RIGHT]:
+            self.current_direction = Direction.RIGHT
 
     def update(self, keys, dt):
         self.handle_input(keys)
@@ -62,6 +65,8 @@ class Mario(pygame.sprite.Sprite):
             self.animation_component.set_state(MarioState.MOVE)
         else:
             self.animation_component.set_state(MarioState.IDLE)
+
+        self.animation_component.set_direction(self.current_direction)
 
         self.animation_component.update(dt)
 
