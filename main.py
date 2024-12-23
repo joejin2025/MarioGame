@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
 characters_sprite_sheet = SpriteSheet("./assets/image/characters.gif")
 sprites_manager = SpriteManager()
 print(sprites_manager.get_sprite_dict())
-mario = Mario(screen, characters_sprite_sheet, sprites_manager, 100, 200)
+mario = Mario(screen, characters_sprite_sheet, sprites_manager, 100, 300)
 
 # 游戏主循环
 while True:
@@ -38,8 +38,9 @@ while True:
     # 填充背景色
     screen.fill(tuple(config["bg_color"]))
 
-    mario.run()
+    keys = pygame.key.get_pressed()
 
+    mario.update(keys)
 
     mario.draw()
 

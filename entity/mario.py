@@ -1,5 +1,9 @@
 import pygame
 
+from assets.component.jump_component import JumpComponent
+from assets.component.move_component import MoveComponent
+
+
 class Mario(pygame.sprite.Sprite):
     def __init__(self, screen, sprite_sheet, sprite_manager, x, y):
         self.screen = screen
@@ -9,16 +13,24 @@ class Mario(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, 0, 0)
 
         self.run_index = 0
+        # 设置components
+        self.move_component = MoveComponent(6, self)
+        self.jump_component = JumpComponent(12, 0.8, self)
         # 设置images
         self.current_image = None
         self.run_images = None
         self.idle_image = None
+        self.jump_image = None
         self.init_images()
 
         self.timer = 0
-        self.delta_time = 7
+        self.delta_time = 4
 
         self.idle()
+
+    def update_rect(self):
+        self.rect.width = self.current_image.frame_width
+        self.rect.height = self.current_image.frame_height
 
     def init_images(self):
         self.idle_image = self.sprite_data_dict["mario_idle"]
@@ -27,21 +39,43 @@ class Mario(pygame.sprite.Sprite):
             self.sprite_data_dict["mario_run_2"],
             self.sprite_data_dict["mario_run_3"],
         ]
+        self.jump_image = self.sprite_data_dict["mario_jump"]
 
     def idle(self):
         self.current_image = self.idle_image
         self.update_rect()
 
-    def update_rect(self):
-        self.rect.width = self.current_image.frame_width
-        self.rect.height = self.current_image.frame_height
+    def jump(self):
+        self.current_image = self.jump_image
+        self.update_rect()
 
     def run(self):
         self.timer += 1
         if self.timer % self.delta_time == 0:
+            self.timer = 0
             self.run_index = (self.run_index + 1) % len(self.run_images)
             self.current_image = self.run_images[self.run_index]
             self.update_rect()
+
+    def handle_input(self, keys):
+        self.move_component.move(keys)
+        if keys[pygame.K_SPACE]:
+            self.jump_component.jump()
+
+    def update(self, keys):
+        self.handle_input(keys)
+
+        self.move_component.update()
+        self.jump_component.update()
+
+        self.update_animation()
+
+    def update_animation(self):
+        self.idle()
+        if self.move_component.velocity != 0:
+            self.run()
+        if self.jump_component.velocity != 0:
+            self.jump()
 
     def draw(self):
         self.screen.blit(self.current_image.image, self.rect)
