@@ -1,0 +1,41 @@
+{
+  "sprite_sheet_path": "./assets/image/characters.gif",
+  "frame_size": [
+    16,
+    16
+  ],
+  "sprites": [
+    {
+      "name": "mario_idle",
+      "x": 276,
+      "y": 44,
+      "scale_factor": 2,
+      "color_key": -1,
+      "collision": false
+    },
+    {
+      "name": "mario_run_1",
+      "x": 290,
+      "y": 44,
+      "scale_factor": 2,
+      "color_key": -1,
+      "collision": false
+    },
+    {
+      "name": "mario_run_2",
+      "x": 304,
+      "y": 44,
+      "scale_factor": 2,
+      "color_key": -1,
+      "collision": false
+    },
+    {
+      "name": "mario_run_3",
+      "x": 321,
+      "y": 44,
+      "scale_factor": 2,
+      "color_key": -1,
+      "collision": false
+    }
+  ]
+}
