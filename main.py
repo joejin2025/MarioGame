@@ -24,11 +24,13 @@ clock = pygame.time.Clock()
 
 characters_sprite_sheet = SpriteSheet("./assets/image/characters.gif")
 sprites_manager = SpriteManager()
-print(sprites_manager.get_sprite_dict())
-mario = Mario(screen, characters_sprite_sheet, sprites_manager, 100, 300)
+
+mario = Mario(screen, characters_sprite_sheet, sprites_manager, 100, 300, config["frame_rate"])
 
 # 游戏主循环
 while True:
+    dt = clock.tick(config["frame_rate"]) / 1000.0
+
     # 处理事件（比如关闭窗口）
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -40,7 +42,7 @@ while True:
 
     keys = pygame.key.get_pressed()
 
-    mario.update(keys)
+    mario.update(keys, dt)
 
     mario.draw()
 
