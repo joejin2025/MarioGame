@@ -9,6 +9,7 @@ class JumpComponent(object):
         self.is_jumping = False
         self.velocity = 0
         self.entity = entity
+        self.init_y = self.entity.rect.y
 
     def jump(self):
         if self.on_ground:
@@ -20,8 +21,8 @@ class JumpComponent(object):
         if not self.on_ground:
             self.velocity += self.gravity
             self.entity.rect.y += self.velocity
-            if self.entity.rect.y >= 300:
-                self.entity.rect.y = 300
+            if self.entity.rect.y >= self.init_y:
+                self.entity.rect.y = self.init_y
                 self.velocity = 0
                 self.on_ground = True
                 self.is_jumping = False

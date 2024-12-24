@@ -1,9 +1,12 @@
 import pygame
 import sys
+import os
 import json
 
+import util.path
+from entity.camera import Camera
+from entity.level import Level
 from entity.mario import Mario
-from common.sprite_sheet import SpriteSheet
 from common.sprite_manager import SpriteManager
 
 # 读取配置文件
@@ -22,11 +25,14 @@ pygame.display.set_caption(config["title"])
 # 设置游戏的帧率
 clock = pygame.time.Clock()
 
-characters_sprite_sheet = SpriteSheet("./assets/image/characters.gif")
 sprites_manager = SpriteManager()
 
-mario = Mario(screen, characters_sprite_sheet, sprites_manager, 100, 300, config["frame_rate"])
+camera = Camera(config["screen_width"], config["screen_height"])
 
+mario = Mario(screen, sprites_manager, 100, 480 - 96, config["frame_rate"])
+
+level = Level(screen, sprites_manager, 32)
+level.load(os.path.join(util.path.get_root_path(), "assets/level/level1-1.json"))
 # 游戏主循环
 while True:
     dt = clock.tick(config["frame_rate"]) / 1000.0
@@ -42,9 +48,13 @@ while True:
 
     keys = pygame.key.get_pressed()
 
-    mario.update(keys, dt)
+    mario.update(keys, dt, level.level_width, level.level_height)
+    camera.update(mario.rect, level.level_width, level.level_height)
+    level.update()
 
-    mario.draw()
+    level.draw(camera)
+    mario.draw(camera)
+
 
     # 更新显示
     pygame.display.update()

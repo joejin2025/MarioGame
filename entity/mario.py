@@ -17,9 +17,8 @@ mario_animations = {
 
 
 class Mario(pygame.sprite.Sprite):
-    def __init__(self, screen, sprite_sheet, sprite_manager, x, y, frame_rate):
+    def __init__(self, screen, sprite_manager, x, y, frame_rate):
         self.screen = screen
-        self.sprite_sheet = sprite_sheet
         self.sprite_data_dict = sprite_manager.get_sprite_dict()
 
         self.rect = pygame.Rect(x, y, 0, 0)
@@ -27,8 +26,8 @@ class Mario(pygame.sprite.Sprite):
         self.current_state = MarioState.IDLE
         self.current_direction = Direction.RIGHT
         # 设置components
-        self.move_component = MoveComponent(6, self)
-        self.jump_component = JumpComponent(12, 0.8, self)
+        self.move_component = MoveComponent(8, self)
+        self.jump_component = JumpComponent(13, 0.8, self)
         self.animation_component = AnimationComponent(
             self.sprite_data_dict,
             self.current_state,
@@ -39,8 +38,8 @@ class Mario(pygame.sprite.Sprite):
 
     def set_image(self, image):
         self.current_image = image
-        self.rect.width = self.current_image.frame_width
-        self.rect.height = self.current_image.frame_height
+        self.rect.width = self.current_image.get_width()
+        self.rect.height = self.current_image.get_height()
 
     def handle_input(self, keys):
         self.move_component.move(keys)
@@ -53,10 +52,10 @@ class Mario(pygame.sprite.Sprite):
         elif keys[pygame.K_RIGHT]:
             self.current_direction = Direction.RIGHT
 
-    def update(self, keys, dt):
+    def update(self, keys, dt, level_width, level_height):
         self.handle_input(keys)
 
-        self.move_component.update()
+        self.move_component.update(level_width)
         self.jump_component.update()
 
         if not self.jump_component.on_ground:
@@ -70,5 +69,5 @@ class Mario(pygame.sprite.Sprite):
 
         self.animation_component.update(dt)
 
-    def draw(self):
-        self.screen.blit(self.current_image.image, self.rect)
+    def draw(self, camera):
+        self.screen.blit(self.current_image, camera.apply(self.rect))

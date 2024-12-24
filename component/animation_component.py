@@ -32,5 +32,5 @@ class AnimationComponent(object):
             self.current_frame_index = (self.current_frame_index + 1) % len(self.all_frames[self.current_state])
             self.current_frame = self.all_frames[self.current_state][self.current_frame_index].copy()
             if self.flipped:
-                self.current_frame.image = pygame.transform.flip(self.current_frame.image, True, False)
+                self.current_frame = pygame.transform.flip(self.current_frame, True, False)
         self.entity.set_image(self.current_frame)

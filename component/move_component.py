@@ -14,5 +14,10 @@ class MoveComponent(object):
         else:
             self.velocity = 0
 
-    def update(self):
-        self.entity.rect.x += self.velocity
+    def update(self, level_width):
+        new_x = self.entity.rect.x + self.velocity
+        if new_x < 0:
+            new_x = 0
+        elif new_x + self.entity.rect.width >= level_width:
+            new_x = level_width - self.entity.rect.width
+        self.entity.rect.x = new_x

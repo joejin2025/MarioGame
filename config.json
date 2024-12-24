@@ -1,7 +1,7 @@
 {
     "title": "超级玛丽",
-    "screen_width": 800,
-    "screen_height": 600,
+    "screen_width": 640,
+    "screen_height": 480,
     "frame_rate": 60,
     "bg_color": [0, 0, 0],
     "init_mario_pos": [100, 200]

@@ -1,5 +1,6 @@
 {
-  "sprite_sheet_path": "./assets/image/characters.gif",
+  "sprite_sheet_path": "assets/image/characters.gif",
+  "type": "player",
   "frame_size": [
     16,
     16
